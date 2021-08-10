@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-CHAINHOME=$HOME/chainx
+CHAINHOME=$HOME/chainx/chainx.exchange
 JAVAHOME=/usr/bin
 
 #rm -rf $CHAINHOME/build
@@ -13,7 +13,7 @@ do
 done
 echo $CLASS_PATH
 
-$JAVAHOME/javac -cp $CLASS_PATH -d $CHAINHOME/build $CHAINHOME/src/exchange/*.java
+$JAVAHOME/javac -cp $CLASS_PATH -d $CHAINHOME/build $CHAINHOME/src/chainx/exchange/*.java
 
 cd $CHAINHOME/build
 jar cvf $CHAINHOME/jars/chainx-exchange.jar *
