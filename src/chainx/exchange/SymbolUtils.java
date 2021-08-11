@@ -15,7 +15,6 @@ public class SymbolUtils
                 return 2;
         }
     }
-
     public static final int GetSizePrecision(Symbol _symbol)
     {
         switch(_symbol.m_code)
@@ -26,7 +25,6 @@ public class SymbolUtils
                 return 2;
         }
     }
-
     public static BigDecimal GetSizeByPrecision(Symbol _symbol, BigDecimal _size)
     {
         return _size.setScale(GetSizePrecision(_symbol), BigDecimal.ROUND_HALF_EVEN);

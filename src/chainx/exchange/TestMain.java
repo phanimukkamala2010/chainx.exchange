@@ -8,42 +8,67 @@ public class TestMain
     public static void main(String args[])
     {
         Symbol eth = new Symbol(SymbolCode.ETHUSD);
-        BigDecimal size = new BigDecimal("1.12345");
+        BigDecimal size = new BigDecimal("1");
 
         BigDecimal price = new BigDecimal("1234.454");
-        Order order1 = new Order(1, eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order1);
+        Order bid1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(bid1);
 
-        price = new BigDecimal("1235.00");
-        Order order2 = new Order(2, eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order2);
+        price = price.add(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order bid2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(bid2);
 
-        price = new BigDecimal("1234.67");
-        Order order3 = new Order(3, eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order3);
+        price = price.subtract(BigDecimal.ONE);
+        price = price.subtract(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order bid3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(bid3);
+
+        try {   Thread.sleep(105); } catch(Exception e){}
+        price = price.add(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order bid4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(bid4);
 
         OrderMatcher matcher = new OrderMatcher();
-        matcher.Add(order1);
-        matcher.Add(order2);
-        matcher.Add(order3);
+        matcher.Add(bid1);
+        matcher.Add(bid2);
+        matcher.Add(bid3);
+        matcher.Add(bid4);
 
         price = new BigDecimal("1234.454");
-        Order order4 = new Order(4, eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order4);
+        size = size.add(BigDecimal.ONE);
+        Order offer1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(offer1);
 
-        price = new BigDecimal("1235.00");
-        Order order5 = new Order(5, eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order5);
+        price = price.add(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order offer2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(offer2);
 
-        price = new BigDecimal("1234.67");
-        Order order6 = new Order(6, eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(order6);
+        price = price.subtract(BigDecimal.ONE);
+        price = price.subtract(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order offer3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(offer3);
 
-        matcher.Add(order4);
-        matcher.Add(order5);
-        matcher.Add(order6);
-        matcher.PrintBids(eth);
-        matcher.PrintOffers(eth);
+        try {   Thread.sleep(105); } catch(Exception e){}
+        price = price.add(BigDecimal.ONE);
+        size = size.add(BigDecimal.ONE);
+        Order offer4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(offer4);
+
+        matcher.Add(offer1);
+        matcher.Add(offer2);
+        matcher.Add(offer3);
+        matcher.Add(offer4);
+
+        matcher.PrintBook(eth);
+
+        matcher.Execute(eth);
+
+        matcher.PrintBook(eth);
 
     }
 
