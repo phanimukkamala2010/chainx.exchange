@@ -5,13 +5,13 @@ import java.util.*;
 
 public class OrderMatcher
 {
-    private HashMap<Symbol, TreeSet<Order>> m_mapSymbol2Bids = new HashMap<Symbol, TreeSet<Order>>();
-    private HashMap<Symbol, TreeSet<Order>> m_mapSymbol2Offers = new HashMap<Symbol, TreeSet<Order>>();
+    private HashMap<Symbol, TreeSet<Order>> m_mapSymbol2Buys = new HashMap<Symbol, TreeSet<Order>>();
+    private HashMap<Symbol, TreeSet<Order>> m_mapSymbol2Sells = new HashMap<Symbol, TreeSet<Order>>();
 
     public void Add(Order _order)
     {
         HashMap<Symbol, TreeSet<Order>> mapSymbol2Orders = 
-            (_order.m_side == OrderSide.BID) ? m_mapSymbol2Bids : m_mapSymbol2Offers;
+            (_order.m_side == OrderSide.BUY) ? m_mapSymbol2Buys : m_mapSymbol2Sells;
 
         TreeSet<Order> orderSet = mapSymbol2Orders.get(_order.m_symbol);
         if(orderSet == null)
@@ -27,36 +27,44 @@ public class OrderMatcher
 
     public void Execute(Symbol _symbol)
     {
-        TreeSet<Order> bidOrderSet = m_mapSymbol2Bids.get(_symbol);    
-        TreeSet<Order> offerOrderSet = m_mapSymbol2Offers.get(_symbol);    
+        TreeSet<Order> buyOrderSet = m_mapSymbol2Buys.get(_symbol);    
+        TreeSet<Order> sellOrderSet = m_mapSymbol2Sells.get(_symbol);    
 
         if(
-                bidOrderSet == null || 
-                bidOrderSet.size() == 0 || 
-                offerOrderSet == null || 
-                offerOrderSet.size() == 0)
+                buyOrderSet == null || 
+                buyOrderSet.isEmpty() || 
+                sellOrderSet == null || 
+                sellOrderSet.isEmpty())
         {
             return;
         }
 
-        Order bidOrder = bidOrderSet.first();
-        Order offerOrder = offerOrderSet.first();
+        Order buyOrder = buyOrderSet.first();
+        Order sellOrder = sellOrderSet.first();
 
-        while(bidOrder.m_price.compareTo(offerOrder.m_price) > 0)  //can match
+        while(buyOrder.m_price.compareTo(sellOrder.m_price) >= 0)  //can match
         {
-            BigDecimal crossSize = bidOrder.GetActiveSize().min(offerOrder.GetActiveSize());        
-            bidOrder.AddFill(offerOrder.m_price, crossSize);
-            offerOrder.AddFill(offerOrder.m_price, crossSize);
+            BigDecimal crossSize = buyOrder.GetActiveSize().min(sellOrder.GetActiveSize());        
+            buyOrder.AddFill(sellOrder.m_price, crossSize);
+            sellOrder.AddFill(sellOrder.m_price, crossSize);
 
-            if(bidOrder.m_status == OrderStatus.FILLED)
+            if(buyOrder.m_status == OrderStatus.FILLED)
             {
-                bidOrderSet.remove(bidOrder);
-                bidOrder = bidOrderSet.first();
+                buyOrderSet.remove(buyOrder);
+                if(buyOrderSet.isEmpty())
+                {
+                    break;
+                }
+                buyOrder = buyOrderSet.first();
             }
-            if(offerOrder.m_status == OrderStatus.FILLED)
+            if(sellOrder.m_status == OrderStatus.FILLED)
             {
-                offerOrderSet.remove(offerOrder);
-                offerOrder = offerOrderSet.first();
+                sellOrderSet.remove(sellOrder);
+                if(sellOrderSet.isEmpty())
+                {
+                    break;
+                }
+                sellOrder = sellOrderSet.first();
             }
         }
     }
@@ -67,11 +75,11 @@ public class OrderMatcher
         PrintBook(_symbol, false);
     }
 
-    public void PrintBook(Symbol _symbol, boolean bBid)
+    public void PrintBook(Symbol _symbol, boolean bBuy)
     {
-        System.out.println("***" + _symbol.m_code + (bBid ? " BIDS***" : " OFFERS***"));
+        System.out.println("***" + _symbol.m_code + (bBuy ? " BUY***" : " SELL***"));
         final HashMap<Symbol, TreeSet<Order>> mapSymbol2Orders = 
-            bBid ? m_mapSymbol2Bids : m_mapSymbol2Offers;
+            bBuy ? m_mapSymbol2Buys : m_mapSymbol2Sells;
         final TreeSet<Order> orderSet = mapSymbol2Orders.get(_symbol);
         if(orderSet != null)
         {

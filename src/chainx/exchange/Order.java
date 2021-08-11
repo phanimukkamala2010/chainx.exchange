@@ -5,8 +5,8 @@ import java.util.*;
 
 enum OrderSide
 {
-    BID,
-    OFFER,
+    BUY,
+    SELL,
 };
 
 enum OrderType
@@ -108,8 +108,8 @@ public class Order implements Comparable<Order>
         }
 
         //compare price and time
-        boolean bBid = (m_side == OrderSide.BID);
-        int value = m_price.compareTo(_order.m_price) * (bBid ? -1 : 1);  //higherbid/lowerask are at the top
+        boolean bSell = (m_side == OrderSide.SELL);
+        int value = m_price.compareTo(_order.m_price) * (bSell ? 1 : -1);  //highersell/lowerbuy are at the top
         if(value == 0)
         {
             value = (m_timestamp > _order.m_timestamp ? 1 : -1);    //newer one goes to the bottom

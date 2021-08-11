@@ -11,58 +11,58 @@ public class TestMain
         BigDecimal size = new BigDecimal("1");
 
         BigDecimal price = new BigDecimal("1234.454");
-        Order bid1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(bid1);
+        Order buy1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BUY, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(buy1);
 
         price = price.add(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order bid2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(bid2);
+        Order buy2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BUY, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(buy2);
 
         price = price.subtract(BigDecimal.ONE);
         price = price.subtract(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order bid3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(bid3);
+        Order buy3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BUY, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(buy3);
 
         try {   Thread.sleep(105); } catch(Exception e){}
         price = price.add(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order bid4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BID, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(bid4);
+        Order buy4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.BUY, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(buy4);
 
         OrderMatcher matcher = new OrderMatcher();
-        matcher.Add(bid1);
-        matcher.Add(bid2);
-        matcher.Add(bid3);
-        matcher.Add(bid4);
+        matcher.Add(buy1);
+        matcher.Add(buy2);
+        matcher.Add(buy3);
+        matcher.Add(buy4);
 
         price = new BigDecimal("1234.454");
         size = size.add(BigDecimal.ONE);
-        Order offer1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(offer1);
+        Order sell1 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.SELL, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(sell1);
 
         price = price.add(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order offer2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(offer2);
+        Order sell2 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.SELL, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(sell2);
 
         price = price.subtract(BigDecimal.ONE);
         price = price.subtract(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order offer3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(offer3);
+        Order sell3 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.SELL, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(sell3);
 
         try {   Thread.sleep(105); } catch(Exception e){}
         price = price.add(BigDecimal.ONE);
         size = size.add(BigDecimal.ONE);
-        Order offer4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.OFFER, OrderType.LIMIT, OrderTif.GTC);
-        System.out.println(offer4);
+        Order sell4 = new Order(OrderUtils.GetUniqueId(), eth, size, price, OrderSide.SELL, OrderType.LIMIT, OrderTif.GTC);
+        System.out.println(sell4);
 
-        matcher.Add(offer1);
-        matcher.Add(offer2);
-        matcher.Add(offer3);
-        matcher.Add(offer4);
+        matcher.Add(sell1);
+        matcher.Add(sell2);
+        matcher.Add(sell3);
+        matcher.Add(sell4);
 
         matcher.PrintBook(eth);
 
