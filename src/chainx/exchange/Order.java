@@ -3,56 +3,15 @@ package chainx.exchange;
 import java.math.*;
 import java.util.*;
 
-enum OrderSide
-{
-    BUY,
-    SELL,
-};
-
-enum OrderType
-{
-    LIMIT,
-    STOPLIMIT,
-};
-
-enum OrderTif
-{
-    GTC,
-    GTD,
-    IOC,
-};
-
-enum OrderStatus
-{
-    NEW,
-    PART_FILLED,
-    FILLED,
-    CANCELLED,
-    REPLACED,
-    EXPIRED,
-};
-
-class OrderFill
-{
-    BigDecimal m_size;
-    BigDecimal m_price;
-    long m_execId;
-
-    public OrderFill(BigDecimal _price, BigDecimal _size)
-    {
-        m_price = _price;
-        m_size = _size;
-        m_execId = OrderUtils.GetUniqueId();
-    }
-}
-
 public class Order implements Comparable<Order>
 {
+    String m_accountId;
+    String m_orderId;
+
     Symbol m_symbol;
-    long m_orderId;
     BigDecimal m_size;
     BigDecimal m_filledSize;
-    Vector<OrderFill> m_fills = new Vector<OrderFill>();
+    Vector<Execution> m_execs = new Vector<Execution>();
     BigDecimal m_price;
     OrderSide m_side;   
     OrderType m_type;
@@ -60,9 +19,10 @@ public class Order implements Comparable<Order>
     long m_timestamp;
     OrderStatus m_status;
 
-    public Order(long _orderId, Symbol _symbol, BigDecimal _size, BigDecimal _price, OrderSide _side, OrderType _type, OrderTif _tif)
+    public Order(String _accountId, Symbol _symbol, BigDecimal _size, BigDecimal _price, OrderSide _side, OrderType _type, OrderTif _tif)
     {
-        m_orderId = _orderId;
+        m_accountId = _accountId;
+        m_orderId = "O" + UniqueIdGenerator.GetUniqueId();
         m_symbol = _symbol;
         m_size = SymbolUtils.GetSizeByPrecision(_symbol, _size);
         m_filledSize = SymbolUtils.GetSizeByPrecision(_symbol, new BigDecimal("0"));
@@ -81,11 +41,11 @@ public class Order implements Comparable<Order>
 
     public void AddFill(BigDecimal _price, BigDecimal _size)
     {
-        OrderFill newFill = new OrderFill(_price, _size);
-        m_fills.add(newFill);
+        Execution newFill = new Execution(m_orderId, _price, _size);
+        m_execs.add(newFill);
 
         m_filledSize = BigDecimal.ZERO; //reset
-        for(Iterator<OrderFill> itr = m_fills.iterator(); itr.hasNext(); )
+        for(Iterator<Execution> itr = m_execs.iterator(); itr.hasNext(); )
         {
             m_filledSize = m_filledSize.add(itr.next().m_size); 
         }
@@ -102,7 +62,7 @@ public class Order implements Comparable<Order>
 
     public int compareTo(Order _order)
     {
-        if(m_orderId == _order.m_orderId)
+        if(m_orderId.equals(_order.m_orderId))
         {
             return 0;   //they are same
         }
@@ -120,6 +80,7 @@ public class Order implements Comparable<Order>
     public String toString()
     {
         return ("[" + 
+                m_accountId + "," +
                 m_orderId + "," +
                 m_symbol + "," + 
                 m_price.toPlainString() + "," + 

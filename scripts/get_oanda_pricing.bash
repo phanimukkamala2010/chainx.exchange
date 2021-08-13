@@ -11,5 +11,6 @@ echo $CLASS_PATH
 
 CLASS=chainpay.TestMain
 CLASS=chainx.exchange.TestMain
+CLASS=chainx.fxpricing.TestMain
 
 java -cp $CLASS_PATH $CLASS

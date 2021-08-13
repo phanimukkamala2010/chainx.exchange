@@ -1,11 +1,5 @@
 package chainx.exchange;
 
-enum SymbolCode
-{
-    BTCUSD,
-    ETHUSD,
-};
-
 public class Symbol
 {
     SymbolCode m_code; 

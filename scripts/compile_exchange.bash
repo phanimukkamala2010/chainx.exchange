@@ -14,6 +14,7 @@ done
 echo $CLASS_PATH
 
 $JAVAHOME/javac -cp $CLASS_PATH -d $CHAINHOME/build $CHAINHOME/src/chainx/exchange/*.java
+$JAVAHOME/javac -cp $CLASS_PATH -d $CHAINHOME/build $CHAINHOME/src/chainx/fxpricing/*.java
 
 cd $CHAINHOME/build
 jar cvf $CHAINHOME/jars/chainx-exchange.jar *

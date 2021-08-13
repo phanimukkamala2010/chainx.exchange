@@ -27,11 +27,11 @@ public class SymbolUtils
     }
     public static BigDecimal GetSizeByPrecision(Symbol _symbol, BigDecimal _size)
     {
-        return _size.setScale(GetSizePrecision(_symbol), BigDecimal.ROUND_HALF_EVEN);
+        return _size.setScale(GetSizePrecision(_symbol), Constants.RoundingMode);
     }
     public static BigDecimal GetPriceByPrecision(Symbol _symbol, BigDecimal _price)
     {
-        return _price.setScale(GetPricePrecision(_symbol), BigDecimal.ROUND_HALF_EVEN);
+        return _price.setScale(GetPricePrecision(_symbol), Constants.RoundingMode);
     }
 
 
